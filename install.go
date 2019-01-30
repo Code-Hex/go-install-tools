@@ -1,29 +1,54 @@
-package install
+package main
 
 import (
-	_ "github.com/acroca/go-symbols"
-	_ "github.com/alecthomas/gometalinter"
-	_ "github.com/cweill/gotests/..."
-	_ "github.com/davidrjenni/reftools/cmd/fillstruct"
-	_ "github.com/fatih/gomodifytags"
-	_ "github.com/go-delve/delve/cmd/dlv"
-	_ "github.com/golangci/golangci-lint/cmd/golangci-lint"
-	_ "github.com/haya14busa/goplay/cmd/goplay"
-	_ "github.com/josharian/impl"
-	_ "github.com/mdempsky/gocode"
-	_ "github.com/mgechev/revive"
-	_ "github.com/ramya-rao-a/go-outline"
-	_ "github.com/rogpeppe/godef"
-	_ "github.com/sourcegraph/go-langserver"
-	_ "github.com/sqs/goreturns"
-	_ "github.com/stamblerre/gocode"
-	_ "github.com/tylerb/gotype-live"
-	_ "github.com/uudashr/gopkgs/cmd/gopkgs"
-	_ "github.com/zmb3/gogetdoc"
-	_ "golang.org/x/lint/golint"
-	_ "golang.org/x/tools/cmd/goimports"
-	_ "golang.org/x/tools/cmd/gorename"
-	_ "golang.org/x/tools/cmd/guru"
-	_ "honnef.co/go/tools/..."
-	_ "winterdrache.de/goformat/goformat"
+	"log"
+	"os/exec"
+	"runtime"
+	"sync"
 )
+
+func main() {
+	list := []string{
+		"github.com/acroca/go-symbols",
+		"github.com/alecthomas/gometalinter",
+		"github.com/cweill/gotests/...",
+		"github.com/davidrjenni/reftools/cmd/fillstruct",
+		"github.com/fatih/gomodifytags",
+		"github.com/go-delve/delve/cmd/dlv",
+		"github.com/golangci/golangci-lint/cmd/golangci-lint",
+		"github.com/haya14busa/goplay/cmd/goplay",
+		"github.com/josharian/impl",
+		"github.com/mdempsky/gocode",
+		"github.com/mgechev/revive",
+		"github.com/ramya-rao-a/go-outline",
+		"github.com/rogpeppe/godef",
+		"github.com/sourcegraph/go-langserver",
+		"github.com/sqs/goreturns",
+		"github.com/stamblerre/gocode",
+		"github.com/tylerb/gotype-live",
+		"github.com/uudashr/gopkgs/cmd/gopkgs",
+		"github.com/zmb3/gogetdoc",
+		"golang.org/x/lint/golint",
+		"golang.org/x/tools/cmd/goimports",
+		"golang.org/x/tools/cmd/gorename",
+		"golang.org/x/tools/cmd/guru",
+		"honnef.co/go/tools/...",
+		"winterdrache.de/goformat/goformat",
+	}
+	var wg sync.WaitGroup
+	cpus := runtime.NumCPU()
+	semaphore := make(chan struct{}, cpus)
+	for _, path := range list {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			semaphore <- struct{}{}
+			err := exec.Command("go", "install", path).Run()
+			if err != nil {
+				log.Printf("install error %s: %s\n", path, err)
+			}
+			<-semaphore
+		}()
+	}
+	wg.Wait()
+}
