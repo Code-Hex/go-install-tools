@@ -18,7 +18,6 @@ func main() {
 		"github.com/golangci/golangci-lint/cmd/golangci-lint",
 		"github.com/haya14busa/goplay/cmd/goplay",
 		"github.com/josharian/impl",
-		"github.com/mdempsky/gocode",
 		"github.com/mgechev/revive",
 		"github.com/ramya-rao-a/go-outline",
 		"github.com/rogpeppe/godef",
