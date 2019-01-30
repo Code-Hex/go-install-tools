@@ -2,4 +2,5 @@
 
 ## Synopsis
 
-    go get -u github.com/Code-Hex/go-tools
+    $ go get -u github.com/Code-Hex/go-install-tools
+    $ go-install-tools
