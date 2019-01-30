@@ -82,4 +82,13 @@ https://github.com/Microsoft/vscode-go/blob/master/src/goInstallTools.ts
 ### Fill structs with defaults
 
 - `fillstruct` from `github.com/davidrjenni/reftools/cmd/fillstruct`
-    
+
+# Contribution
+
+Very easy 3 steps :D
+
+1. Fork [https://github.com/Code-Hex/go-install-tools/fork](https://github.com/Code-Hex/go-install-tools/fork)
+2. Commit your changes
+3. Create a new Pull Request
+
+I'm waiting for a lot of PR.
