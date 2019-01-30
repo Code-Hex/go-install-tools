@@ -40,6 +40,7 @@ func main() {
 	semaphore := make(chan struct{}, cpus)
 	for _, path := range list {
 		wg.Add(1)
+		path := path
 		go func() {
 			defer wg.Done()
 			semaphore <- struct{}{}
