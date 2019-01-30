@@ -44,7 +44,7 @@ func main() {
 		go func() {
 			defer wg.Done()
 			semaphore <- struct{}{}
-			log.Printf("start install %s\n", path)
+			log.Printf("start to install %s\n", path)
 			err := exec.Command("go", "get", "-u", path).Run()
 			if err != nil {
 				log.Printf("install error %s: %s\n", path, err)
